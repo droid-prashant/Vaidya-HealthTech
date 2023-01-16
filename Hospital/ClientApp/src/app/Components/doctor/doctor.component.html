@@ -1,0 +1,170 @@
+<div>
+    <button style="float: right;margin-right: 10px;margin-bottom: 30px;" class="btn btn-primary" data-bs-toggle="modal"
+        data-bs-target="#exampleModal">Add Doctor</button>
+</div>
+<div>
+    <table class="table table-striped" style="margin-left: 10px;">
+        <thead>
+            <th>S.N</th>
+            <th>Doctor Name</th>
+            <th>Address</th>
+            <th>Phone Number</th>
+            <th>Specialist</th>
+            <th>Action</th>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of doctorList;let i=index;">
+                <td>{{i+1}}</td>
+                <td>{{data.FirstName}}&nbsp;{{data.LastName}}</td>
+                <td>{{data.Address}}</td>
+                <td>{{data.PhoneNumber}}</td>
+                <td>{{data.Specialist}}</td>
+                <td>
+                    <button class="btn btn-primary" data-bs-toggle="modal" (click)="selectedDoctor(data.DoctorId)"
+                        data-bs-target="#editDoctorRow">Edit</button>
+                    <button class="btn btn-danger" style="margin-left: 5px;" data-bs-toggle="modal"
+                        data-bs-target="#deleteDoctor" (click)="removeDoctor(data.DoctorId)">Delete</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal for new Doctor -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">New Doctor</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="doctor.DoctorFormGroup">
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label for="FirstName">First Name</label>
+                            <input type="text" formControlName="FirstName" class="form-control">
+                            <small *ngIf="doctor.DoctorFormGroup.controls['FirstName'].invalid &&
+                            doctor.DoctorFormGroup.controls['FirstName'].touched" class="text-danger">Validation
+                                Required in First Name</small>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <label for="LastName">Last Name</label>
+                            <input type="text" formControlName="LastName" class="form-control">
+                            <small *ngIf="doctor.DoctorFormGroup.get('LastName')?.invalid&&
+                            doctor.DoctorFormGroup.get('LastName')?.touched" class="text-danger">Validation Required in
+                                Last Name</small>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label for="Address">Address</label>
+                            <input type="text" formControlName="Address" class="form-control">
+                            <small *ngIf="doctor.DoctorFormGroup.get('Address')?.invalid&&
+                            doctor.DoctorFormGroup.get('Address')?.touched" class="text-danger">Validation Required in
+                                Address</small>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <label for="PhoneNumber">Phone Number</label>
+                            <input type="text" formControlName="PhoneNumber" class="form-control">
+                            <small *ngIf="doctor.DoctorFormGroup.get('PhoneNumber')?.invalid&&
+                            doctor.DoctorFormGroup.get('PhoneNumber')?.touched" class="text-danger">Validation Required
+                                in Phone Number</small>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label for="Specialist">Specialist</label>
+                            <input type="text" formControlName="Specialist" class="form-control">
+                            <small *ngIf="doctor.DoctorFormGroup.get('Specialist')?.invalid&&
+                            doctor.DoctorFormGroup.get('Specialist')?.touched" class="text-danger">Validation Required
+                                in Specialist</small>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" #closebutton class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" [disabled]="doctor.DoctorFormGroup.invalid" class="btn btn-primary"
+                    (click)="addDoctor()">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal to edit Doctor -->
+<div class="modal fade" id="editDoctorRow" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Doctor</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" *ngIf="isDoctorSelected">
+                <form [formGroup]="doctor.DoctorFormGroup">
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label for="FirstName">First Name</label>
+                            <input type="text" formControlName="FirstName" class="form-control">
+                            <small *ngIf="doctor.DoctorFormGroup.controls['FirstName'].invalid &&
+                            doctor.DoctorFormGroup.controls['FirstName'].touched" class="text-danger">Validation
+                                Required in First Name</small>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <label for="LastName">Last Name</label>
+                            <input type="text" formControlName="LastName" class="form-control">
+                            <small *ngIf="doctor.DoctorFormGroup.controls['LastName'].invalid &&
+                            doctor.DoctorFormGroup.controls['LastName'].touched" class="text-danger">Validation
+                                Required in Last Name</small>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label for="Address">Address</label>
+                            <input type="text" formControlName="Address" class="form-control">
+                            <small *ngIf="doctor.DoctorFormGroup.controls['Address'].invalid &&
+                            doctor.DoctorFormGroup.controls['Address'].touched" class="text-danger">Validation
+                                Required in Address</small>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <label for="PhoneNumber">Phone Number</label>
+                            <input type="text" formControlName="PhoneNumber" class="form-control">
+                            <small *ngIf="doctor.DoctorFormGroup.controls['PhoneNumber'].invalid &&
+                            doctor.DoctorFormGroup.controls['PhoneNumber'].touched" class="text-danger">Validation
+                                Required in Phone Number</small>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label for="Specialist">Specialist</label>
+                            <input type="text" formControlName="Specialist" class="form-control">
+                            <small *ngIf="doctor.DoctorFormGroup.controls['Specialist'].invalid &&
+                            doctor.DoctorFormGroup.controls['Specialist'].touched" class="text-danger">Validation
+                                Required in Specialist</small>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" #closebutton class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" [disabled]="doctor.DoctorFormGroup.invalid" (click)="editDoctor()">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for delete confirm-->
+<!-- <div class="modal fade" id="deleteDoctor" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Are you sure want to delete</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" #closeDelete class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+          <button type="button" class="btn btn-danger">Yes</button>
+        </div>
+      </div>
+    </div>
+  </div> -->
